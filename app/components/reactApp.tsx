@@ -2,11 +2,12 @@
 
 import React, {useEffect, useState} from 'react';
 import { Workspace } from './workspace';
+import '../styles/header.css'
 
 function Header() {
     return (
         <header>
-            <h1>Quilt Labs Notes Filesystem App</h1>
+            <h1><img className='quilt-logo' src='quilt_name.png'/>Notes</h1>
         </header>
     );
 }
