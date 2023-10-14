@@ -14,3 +14,28 @@
     min-height: 100px;
     padding: 10px;
 }
+
+.name-container {
+    display: inline-block;
+    border: 2px solid transparent;
+    padding-right: 40px;
+    transition: border 0.3s ease;
+}
+
+.name-container:hover {
+    border-color: black;
+}
+
+.editable-input {
+    font-size: 1em;
+    font-weight: normal;
+    font-family: inherit;
+    border: 2px solid black; 
+    outline: none;          
+    background: transparent;
+    padding: 0;            
+    margin: 0;               
+    width: auto;              
+    min-width: 50px;          
+    padding-right: 200px;
+}

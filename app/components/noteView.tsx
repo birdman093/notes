@@ -8,10 +8,11 @@ interface NoteViewProps {
     note: Item;
 }
 
-const NoteView: React.FC<NoteViewProps> = ({ note }) => {
+const NoteView: React.FC<NoteViewProps> = ({ note}) => {
     const { updateNote } = useContext(WorkspaceContext);
     const [isEditing, setIsEditing] = useState(false);
     const [text, setText] = useState(note.note);
+
 
     const handleNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);

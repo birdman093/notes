@@ -11,5 +11,17 @@
 }
 
 .dirItem:hover {
-    background-color: #e0e0e0;
+    background-color: lightgray;
+}
+
+.push-button {
+    margin-bottom: 20px;
+}
+
+.selected {
+    background-color: darkgray;
+}
+
+.selected:hover {
+    background-color: darkgray;
 }

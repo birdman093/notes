@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Item } from './types';
 import { WorkspaceContext } from './workspace';
 import Button from '@mui/material/Button';
+import { itemIcon } from './itemIcon';
 
 import '../styles/directory.css'
 
@@ -10,15 +11,16 @@ interface DirectoryViewProps {
     directory: Item;
 }
 
-const DirectoryView: React.FC<DirectoryViewProps> = ({ directory }) => {
-    const { addNote, addDirectory, setCurrentItem } = useContext(WorkspaceContext);
+const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
+    const { addNote, addDirectory, setCurrentItem, deletion } = useContext(WorkspaceContext);
+    const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+    const [lastClickedItem, setLastClickedItem] = useState<number | null>(null);
+
 
     const handleAddNote = () => {
         const fileName = window.prompt("Enter the name of the new note:");
         if (fileName === null) return;
-        const noteText = window.prompt("Enter the text of the new note:");
-        if (noteText === null) return;
-        addNote(fileName, noteText);
+        addNote(fileName, "");
     };
 
     const handleAddDirectory = () => {
@@ -27,9 +29,35 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory }) => {
         addDirectory(dirName);
     };
 
+    const handleDelete = () => {
+        window.confirm("Please confirm you would like to delete the selected files")
+        deletion(selectedItems);
+    }
+
     const handleItemClick = (item: Item) => {
         setCurrentItem(item);
     };
+
+    const handleSelectionClick = (event: React.MouseEvent, childItem: Item, index: number) => {
+        // Shift held and previously clicked item
+        if (event.shiftKey && lastClickedItem !== null) {
+            const start = Math.min(lastClickedItem, index);
+            const end = Math.max(lastClickedItem, index);
+            const itemsToSelect = directory.items?.slice(start, end + 1);
+            if (itemsToSelect) {
+                setSelectedItems(prevItems => [...Array.from(new Set([...prevItems, ...itemsToSelect]))]);
+            }
+        } else {
+            if (selectedItems.includes(childItem)) {
+                setSelectedItems([]);
+            } else {
+                setSelectedItems([childItem]);
+            }
+        }
+    
+        setLastClickedItem(index);
+    };
+    
 
     return (
         <div>
@@ -50,13 +78,23 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory }) => {
                         backgroundColor: '#8c4ba2'
                     }
                   }}>+ Directory</Button>
+                <Button className='push-button' onClick={handleDelete} variant="contained"
+                sx={{
+                    backgroundColor: '#6a3481',
+                    '&:hover': {
+                        backgroundColor: '#8c4ba2'
+                    }
+                  }}>- Delete</Button>
             </div>
             
             <table className="dirSection">
                 <tbody>
                     {directory.items?.map((childItem, index) => (
-                        <tr className="dirItem" key={index} onClick={() => handleItemClick(childItem)}>
-                            <td>{childItem.name}</td>
+                        <tr className={`dirItem ${selectedItems.includes(childItem) ? "selected" : ""}`}
+                        key={index} 
+                        onDoubleClick={() => handleItemClick(childItem)} 
+                        onClick={(event) => handleSelectionClick(event, childItem, index)}>
+                            <td>{itemIcon(childItem)}{childItem.name}</td>
                         </tr>
                     ))}
                 </tbody>
