@@ -2,6 +2,7 @@ import React, { useState, useContext, useCallback } from 'react';
 import { Item } from './types';
 import NoteView from './noteView';
 import DirectoryView from './directoryView';
+import Button from '@mui/material/Button';
 
 import _ from 'lodash';
 
@@ -19,13 +20,41 @@ function ItemView(item: Item) {
 
         setCurrentItem(item.parent);
     }, [item, setCurrentItem]);
+
+    const fullFilePath = (pathItem: Item):string => {
+        let pathList: string[] = [];
+        let currentItem: Item | undefined = pathItem;
+        while (currentItem != undefined)
+        {
+            pathList.unshift(currentItem.name);
+            currentItem = currentItem.parent;
+        }
+        return pathList.join('/');
+    }
+
+    const itemIcon = (pathItem: Item):JSX.Element => {
+        if (pathItem.type == 'note'){
+            return <img src='/document.png'></img>
+        } else {
+            return <img src='/folder.png'></img>
+        }
+    }
     
     return (
         <div>
-            <h2>Current Item: {item.name}</h2>
-            <h3>Type: {item.type}</h3>
-            <div className="item">
-                {item.parent != null && <button onClick={goToEnclosingFolder}>Previous Directory</button>}
+            <h2>Path: {fullFilePath(item)}</h2>
+            {item.parent != null && 
+            <Button onClick={goToEnclosingFolder} variant="contained"
+                sx={{
+                    marginRight: 2,
+                    backgroundColor: '#6a3481',
+                    '&:hover': {
+                        backgroundColor: '#8c4ba2'
+                    }
+                  }}>Previous Directory</Button>
+            }
+            <h3>{itemIcon(item)} {item.name}</h3>
+            <div className="item">    
                 {item.type == 'directory' && (
                     <DirectoryView directory={item} />
                 )}

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Item } from './types';
 import { WorkspaceContext } from './workspace';
+import Button from '@mui/material/Button';
 
 import '../styles/directory.css'
 
@@ -32,8 +33,25 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory }) => {
 
     return (
         <div>
-            <button onClick={handleAddNote}>New Note</button>
-            <button onClick={handleAddDirectory}>New Directory</button>
+            <div className='push-button'>
+                <Button className='push-button' onClick={handleAddNote} variant="contained"
+                sx={{
+                    marginRight: 2,
+                    backgroundColor: '#6a3481',
+                    '&:hover': {
+                        backgroundColor: '#8c4ba2'
+                    }
+                  }}>+ Note</Button>
+                <Button className='push-button' onClick={handleAddDirectory} variant="contained"
+                sx={{
+                    marginRight: 2,
+                    backgroundColor: '#6a3481',
+                    '&:hover': {
+                        backgroundColor: '#8c4ba2'
+                    }
+                  }}>+ Directory</Button>
+            </div>
+            
             <table className="dirSection">
                 <tbody>
                     {directory.items?.map((childItem, index) => (
