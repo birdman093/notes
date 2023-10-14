@@ -7,7 +7,7 @@ import '../styles/header.css'
 function Header() {
     return (
         <header>
-            <h1><img className='quilt-logo' src='quilt_name.png'/>Notes</h1>
+            <h1><img className='feathers-logo' src='feathers.png'/><img className='quilt-logo' src='ql.png'/><span className="header-name">Notes</span></h1>
         </header>
     );
 }
