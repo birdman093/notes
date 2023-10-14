@@ -1,9 +1,14 @@
-# Quilt Labs - Notes Filesystem App Challenge
+# Quilt Labs - Notes - Russell Feathers
 
-## Russell Feathers - Challenge Documentation
+## Russell Documentation
 
-### General Notes on Implementation
+### Implementation
 
+<img src="./public/app.png" style="border-radius: 8px;">
+
+### Usage Notes
+  - Names editable from within items by double clicking
+  - Multiple selection of items allowed through using shift
 
 ### Tricky Problems Faced
 
@@ -22,6 +27,7 @@
   - Better note input formatting
   - more metadata to files and directories
   - more error handling
+  - multiple selection with ctrl
 - Persistent Storage in database or locally to disk
   - NoSQL, RDBS database, or .json
 - Data Types
@@ -29,6 +35,7 @@
 
 ### Any Additional Steps
 - Runs the same as the steps below
+- downloaded Material UI for formatting buttons
 
 
 ## Running the code
