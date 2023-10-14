@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Item } from './types';
 import { WorkspaceContext } from './workspace';
+import Button from '@mui/material/Button';
 
 import '../styles/note.css'
 
@@ -14,7 +15,7 @@ const NoteView: React.FC<NoteViewProps> = ({ note}) => {
     const [text, setText] = useState(note.note);
 
 
-    const handleNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(event.target.value);
     };
 
@@ -28,27 +29,52 @@ const NoteView: React.FC<NoteViewProps> = ({ note}) => {
         setIsEditing(false);
     };
 
+    const handleNoteCancel = () => {
+        setText(note.note);
+        setIsEditing(false);
+    };
+
     return (
-        <div className="noteSection"  onClick={() => {
-            if (!isEditing) {
-                setIsEditing(true)}
-            }
-        }>
-            {isEditing ? (
-                <div>
-                    <input
-                        type="text"
-                        value={text}
-                        onChange={handleNoteChange}
-                    />
-                    <button onClick={handleNoteSubmit}>Save</button>
-                </div>
-            ) : (
-                <div>
-                    {text}
-                </div>
-            )}
+        <div>
+            <div className="noteSection"  onClick={() => {
+                if (!isEditing) {
+                    setIsEditing(true)}
+                }
+            }>
+                {isEditing ? (
+                    <div className="full-width-div">
+                        <textarea
+                            rows={20}
+                            value={text}
+                            onChange={handleNoteChange}
+                            className="full-width-input"
+                        />
+                    </div>
+
+                ) : (
+                    <div>
+                        {text}
+                    </div>
+                )}
+            </div>
+            {isEditing ? (<Button className='push-button' onClick={handleNoteSubmit} variant="contained"
+            sx={{
+                marginRight: 2,
+                backgroundColor: '#6a3481',
+                '&:hover': {
+                    backgroundColor: '#8c4ba2'
+                }
+              }}>Save</Button>):(<></>)}
+            {isEditing ? (<Button className='push-button' onClick={handleNoteCancel} variant="contained"
+            sx={{
+                marginRight: 2,
+                backgroundColor: '#6a3481',
+                '&:hover': {
+                    backgroundColor: '#8c4ba2'
+                }
+              }}>Cancel</Button>):(<></>)}
         </div>
+
     );
 };
 

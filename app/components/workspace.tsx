@@ -54,7 +54,6 @@ function ItemView(item: Item) {
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             setIsEditing(false);
-            updateName(editableName);
         }
     };
     
@@ -71,7 +70,7 @@ function ItemView(item: Item) {
                     }
                   }}>Previous Directory</Button>
             }
-            <h3 onDoubleClick={handleDoubleClick}>
+            <h3 className="editable-name-container" onDoubleClick={handleDoubleClick}>
                 {itemIcon(item)} 
                 {isEditing ? (
                     <input 
@@ -136,10 +135,17 @@ export function Workspace() {
     }, []);
 
     const addNote = useCallback((fileName: string, noteText: string) => {
+
+        let invalidName = false;
         setItemStack(prevStack => {
             // Deep clone the itemStack
             const updatedStack = _.cloneDeep(prevStack);
             const currentDir = updatedStack[updatedStack.length - 1];
+            if (duplicateName(currentDir, fileName)){
+                invalidName = true;
+                return updatedStack;
+            }
+
             if (currentDir.type === 'directory') {
                 const newNote: Item = {
                     type: 'note',
@@ -155,13 +161,22 @@ export function Workspace() {
             }
             return updatedStack;
         });
+        if (invalidName){
+            alert("No note created. Duplicate name in Directory");
+        }
     }, []);
     
     const addDirectory = useCallback((newDirName: string) => {
+        let invalidName = false;
         setItemStack(prevStack => {
             // Deep clone the itemStack
             const updatedStack = _.cloneDeep(prevStack);
             const currentDir = updatedStack[updatedStack.length - 1];
+            console.log(currentDir);
+            if (duplicateName(currentDir, newDirName)){
+                invalidName = true;
+                return updatedStack;
+            }
             if (currentDir.type === 'directory') {
                 const newDir: Item = {
                     type: 'directory',
@@ -175,7 +190,12 @@ export function Workspace() {
                 }
             }
             return updatedStack;
+            
         });
+        if (invalidName)
+        {
+            alert("No directory created. Duplicate name in directory");
+        }
     }, []);
 
     const deletion = useCallback((selectedItems: Item[]) => {
@@ -204,16 +224,38 @@ export function Workspace() {
         
     }, []);
 
-    const updateName = useCallback((newName: string) => {
-
+    const updateName = (newName: string) => {
+        if (newName === "") {
+            alert("No changes. Name cannot be an empty string");
+            return;
+        }
+        let invalidName = false;
         setItemStack(prevStack => {
             const updatedStack = [...prevStack];
             const currentItem = updatedStack[updatedStack.length - 1];
+            if (duplicateName(currentItem.parent, newName)){
+                invalidName = true;
+                return updatedStack;
+            }
             currentItem.name = newName;
             updatedStack[updatedStack.length - 1] = { ...currentItem };
             return updatedStack;
         });
-    }, []);
+        // moved outside to avoid double setItemStack call
+        if (invalidName)
+        {
+            alert("No Change Ocurred. Duplicate name in Directory");
+        }
+
+    };
+
+    const duplicateName = (dirToCheckForDuplicate:Item | undefined, newName:string):boolean => {
+        let invalidName = false;
+        if (dirToCheckForDuplicate && dirToCheckForDuplicate.items){
+            invalidName = dirToCheckForDuplicate.items.some(item => item.name == newName) 
+        }
+        return invalidName;
+    }
     
     const updateNote = useCallback((newText: string) => {
         setItemStack(prevStack => {

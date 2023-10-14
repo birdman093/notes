@@ -1,5 +1,36 @@
 # Quilt Labs - Notes Filesystem App Challenge
 
+## Russell Feathers - Challenge Documentation
+
+### General Notes on Implementation
+
+
+### Tricky Problems Faced
+
+- Setting state to itemStack
+  - Surprised that itemStack length grew as it went but when making updates I used the "last" object in the itemStack
+  - Needed to make a deep copy each time.  This made sense because of react's state management but could be expensive on an intricate project
+- Double Calling by React
+  - To update the name I updated the setItemStack within a function called updateName.
+  - Interestingly React rendering called the setItemStack function twice but only called the updateName function itself once
+  - Set up booleans for the fileName outside the setItemStack function to avoid double error messages for duplicate names
+  - One solution I saw was to turn off React Strict mode but didn't want to go that route
+
+### Next Steps
+- UI
+  - clickable file Path
+  - Better note input formatting
+  - more metadata to files and directories
+  - more error handling
+- Persistent Storage in database or locally to disk
+  - NoSQL, RDBS database, or .json
+- Data Types
+  - unique id rather than relying on name. Didn't need that in my implementation but seemed like that could be helpful
+
+### Any Additional Steps
+- Runs the same as the steps below
+
+
 ## Running the code
 
 1. If you don’t have it please install [node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).

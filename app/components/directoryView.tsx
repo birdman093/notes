@@ -38,6 +38,7 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
         setCurrentItem(item);
     };
 
+    // Similar to Google Drive logic
     const handleSelectionClick = (event: React.MouseEvent, childItem: Item, index: number) => {
         // Shift held and previously clicked item
         if (event.shiftKey && lastClickedItem !== null) {
@@ -89,12 +90,15 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
             
             <table className="dirSection">
                 <tbody>
+                    <th>
+                        <td>Name</td>
+                    </th>
                     {directory.items?.map((childItem, index) => (
                         <tr className={`dirItem ${selectedItems.includes(childItem) ? "selected" : ""}`}
                         key={index} 
                         onDoubleClick={() => handleItemClick(childItem)} 
                         onClick={(event) => handleSelectionClick(event, childItem, index)}>
-                            <td>{itemIcon(childItem)}{childItem.name}</td>
+                            <td className="td-content">{itemIcon(childItem)}<span className="list-item">{childItem.name}</span></td>
                         </tr>
                     ))}
                 </tbody>

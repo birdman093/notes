@@ -10,10 +10,6 @@
     height: 30px;
 }
 
-.dirItem:hover {
-    background-color: lightgray;
-}
-
 .push-button {
     margin-bottom: 20px;
 }
@@ -24,4 +20,17 @@
 
 .selected:hover {
     background-color: darkgray;
+}
+
+.list-item {
+    margin-left: 10px;
+}
+
+.td-content {
+    display: flex;
+    align-items: center;
+}
+
+th {
+    padding-bottom: 10px;
 }
