@@ -79,10 +79,12 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
             </div>
             
             <table className="dirSection">
-                <tbody>
-                    <th>
-                        <td>Name</td>
-                    </th>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>                   
                     {directory.items?.map((childItem, index) => (
                         <tr className={`dirItem no-select ${selectedItems.includes(childItem) ? "selected" : ""}`}
                         key={index} 

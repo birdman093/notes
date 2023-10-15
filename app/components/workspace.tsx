@@ -177,7 +177,6 @@ export function Workspace() {
             // Deep clone the itemStack
             const updatedStack = _.cloneDeep(prevStack);
             const currentDir = updatedStack[updatedStack.length - 1];
-            console.log(currentDir);
             if (duplicateName(currentDir, newDirName)){
                 invalidName = true;
                 return updatedStack;
@@ -233,6 +232,7 @@ export function Workspace() {
             return;
         }
         let invalidName = false;
+        
         setItemStack(prevStack => {
             const updatedStack = [...prevStack];
             const currentItem = updatedStack[updatedStack.length - 1];

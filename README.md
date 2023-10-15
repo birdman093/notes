@@ -15,14 +15,14 @@
 
 ### Tricky Problems Faced
 
-- Deepcopy of itemStack
-  - itemStack length grew as it went but when making updates I used needed the "last" object in the itemStack
-  - Made a deep copy before each change to ensure React's state immutability principle, but could be expensive on an intricate project
 - Double invocation of state update functions
   - To update filenames, I used the setItemStack state update function within updateName.
   - setItemStack was invocated twice but the updateName function itself was only called once
   - Some suggestions were to turn off React strict mode, but decided on the below solution
   - Utilized booleans to display alerts for duplicate file name outside the setItemStack function to avoid double alert messages being displayed twice during the setItemStack invocation
+- Deepcopy, length of itemStack
+  - itemStack length grew as it went but when making updates I only used the "last" object in the itemStack
+  - Made a deep copy before each change for updateName, deletion, to ensure React's state immutability principle, but could be expensive on an intricate project
 
 ### Next Steps
 - UI/UX
