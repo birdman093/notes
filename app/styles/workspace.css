@@ -46,3 +46,29 @@
     display: flex;
     align-items: center;
 }
+
+.directory-link {
+    text-decoration: none;
+    color: black;
+    background-color: lightgray;
+    border-radius: 8px;
+    padding:4px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    margin-left:4px;
+    margin-right: 4px;
+}
+
+.directory-link:hover {
+    background-color: #b0b0b0;
+    cursor: pointer;
+}
+
+.custom-button.MuiButton-contained {
+    margin-right: 8px;
+    background-color: #6a3481;
+}
+
+.custom-button.MuiButton-contained:hover {
+    background-color: #8c4ba2;
+}

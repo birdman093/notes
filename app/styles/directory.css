@@ -10,16 +10,16 @@
     height: 30px;
 }
 
-.push-button {
-    margin-bottom: 20px;
+.dirItem:hover {
+    background-color: lightgray;
 }
 
 .selected {
-    background-color: darkgray;
+    background-color: #c4e2f8
 }
 
 .selected:hover {
-    background-color: darkgray;
+    background-color: #c4e2f8
 }
 
 .list-item {
@@ -32,5 +32,19 @@
 }
 
 th {
+    padding-top: 20px;
     padding-bottom: 10px;
+    font-family: Arial;
 }
+
+td {
+    font-family: Arial;
+    cursor: pointer;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }

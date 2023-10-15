@@ -14,7 +14,6 @@ const NoteView: React.FC<NoteViewProps> = ({ note}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [text, setText] = useState(note.note);
 
-
     const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(event.target.value);
     };
@@ -24,7 +23,6 @@ const NoteView: React.FC<NoteViewProps> = ({ note}) => {
             alert('Cannot save empty note.');
             return
         }
-        
         updateNote(text);
         setIsEditing(false);
     };
@@ -39,40 +37,23 @@ const NoteView: React.FC<NoteViewProps> = ({ note}) => {
             <div className="noteSection"  onClick={() => {
                 if (!isEditing) {
                     setIsEditing(true)}
-                }
-            }>
+                }}>
                 {isEditing ? (
                     <div className="full-width-div">
-                        <textarea
-                            rows={20}
-                            value={text}
-                            onChange={handleNoteChange}
-                            className="full-width-input"
-                        />
-                    </div>
-
-                ) : (
-                    <div>
-                        {text}
-                    </div>
-                )}
+                        <textarea rows={20} value={text} onChange={handleNoteChange}
+                            className="full-width-input"/>
+                    </div>) 
+                    : 
+                    (<div>{text}</div>)}
             </div>
-            {isEditing ? (<Button className='push-button' onClick={handleNoteSubmit} variant="contained"
-            sx={{
-                marginRight: 2,
-                backgroundColor: '#6a3481',
-                '&:hover': {
-                    backgroundColor: '#8c4ba2'
-                }
-              }}>Save</Button>):(<></>)}
-            {isEditing ? (<Button className='push-button' onClick={handleNoteCancel} variant="contained"
-            sx={{
-                marginRight: 2,
-                backgroundColor: '#6a3481',
-                '&:hover': {
-                    backgroundColor: '#8c4ba2'
-                }
-              }}>Cancel</Button>):(<></>)}
+            {isEditing ? (
+                <div>
+                    <Button className="custom-button" onClick={handleNoteSubmit} 
+                    variant="contained">Save</Button>
+                    <Button className="custom-button" onClick={handleNoteCancel} 
+                    variant="contained">Cancel</Button>
+                </div>)
+                :(<></>)}
         </div>
 
     );

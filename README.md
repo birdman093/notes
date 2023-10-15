@@ -7,36 +7,39 @@
 <img src="./public/app.png" style="border-radius: 8px;">
 
 ### Usage Notes
-  - Names editable from within items by double clicking
-  - Multiple selection of items allowed through using shift
+  - Add new notes, directories
+  - Delete items by selection
+  - Edit item names of current item by double clicking fileName located below 'Path' and 'Previous Directory'
+  - Select multiple items simultaneously using shift key
+  - Navigate backwards using Previous Directory button and through clicking directories in 'Path' at top
 
 ### Tricky Problems Faced
 
-- Setting state to itemStack
-  - Surprised that itemStack length grew as it went but when making updates I used the "last" object in the itemStack
-  - Needed to make a deep copy each time.  This made sense because of react's state management but could be expensive on an intricate project
-- Double Calling by React
-  - To update the name I updated the setItemStack within a function called updateName.
-  - Interestingly React rendering called the setItemStack function twice but only called the updateName function itself once
-  - Set up booleans for the fileName outside the setItemStack function to avoid double error messages for duplicate names
-  - One solution I saw was to turn off React Strict mode but didn't want to go that route
+- Deepcopy of itemStack
+  - itemStack length grew as it went but when making updates I used needed the "last" object in the itemStack
+  - Made a deep copy before each change to ensure React's state immutability principle, but could be expensive on an intricate project
+- Double invocation of state update functions
+  - To update filenames, I used the setItemStack state update function within updateName.
+  - setItemStack was invocated twice but the updateName function itself was only called once
+  - Some suggestions were to turn off React strict mode, but decided on the below solution
+  - Utilized booleans to display alerts for duplicate file name outside the setItemStack function to avoid double alert messages being displayed twice during the setItemStack invocation
 
 ### Next Steps
-- UI
-  - clickable file Path
-  - Better note input formatting
-  - more metadata to files and directories
-  - more error handling
-  - multiple selection with ctrl
-- Persistent Storage in database or locally to disk
-  - NoSQL, RDBS database, or .json
+- UI/UX
+  - Implement rich text editing for enhanced note input and display
+  - Add Metadata attributes to items, such as date created, date modified, previews
+  - Expand error handling (limiting character types?)
+  - Filte, sort, search
+- Web Service 
+  - Implement persistent storage in NoSQL database or by saving locally to formats like .json, .txt
 - Data Types
-  - unique id rather than relying on name. Didn't need that in my implementation but seemed like that could be helpful
+  - Assign Unique ids to each item for more robust data handling, rather than solely relying on names. This was not a requirement in this design but coudl be beneficaial with more intricate data management.
+- Browser/ Mobile Testing
+  - The application was primarily tested on Safari and Chrome browsers on a MacBook
 
-### Any Additional Steps
-- Runs the same as the steps below
-- downloaded Material UI for formatting buttons
-
+### Additional Run Steps
+- Runs per below
+- Downloaded Material UI for Buttons (in package.json)
 
 ## Running the code
 

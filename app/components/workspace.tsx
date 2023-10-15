@@ -27,17 +27,36 @@ function ItemView(item: Item) {
         setCurrentItem(item.parent);
     }, [item, setCurrentItem]);
 
-    const fullFilePath = (pathItem: Item):string => {
-        let pathList: string[] = [];
+    const itemFilePathList = (pathItem: Item): Item[] => {
+        let pathList: Item[] = [];
         let currentItem: Item | undefined = pathItem;
-        while (currentItem != undefined)
-        {
-            pathList.unshift(currentItem.name);
+        while (currentItem != undefined) {
+            pathList.unshift(currentItem);
             currentItem = currentItem.parent;
         }
-        return pathList.join('/');
+        return pathList;
     }
-
+    
+    const itemFilePath = (currentItem:Item) => {
+        const pathList = itemFilePathList(currentItem);
+        return (
+            <div>
+                Path:&nbsp;
+                {pathList.map((item, index) => (
+                    <span key={index}>
+                        {index > 0 && '/'} 
+                        <a className="directory-link"onClick={() => handleDirectoryClick(item)}>
+                            {item.name}</a>
+                    </span>
+                ))}
+            </div>
+        );
+    }
+    
+    const handleDirectoryClick = (item: Item) => {
+        setCurrentItem(item);
+    }
+    
     const handleDoubleClick = () => {
         setIsEditing(true);
     };
@@ -59,31 +78,18 @@ function ItemView(item: Item) {
     
     return (
         <div>
-            <h2>Path: {fullFilePath(item)}</h2>
+            <h2>{itemFilePath(item)}</h2>
             {item.parent != null && 
-            <Button onClick={goToEnclosingFolder} variant="contained"
-                sx={{
-                    marginRight: 2,
-                    backgroundColor: '#6a3481',
-                    '&:hover': {
-                        backgroundColor: '#8c4ba2'
-                    }
-                  }}>Previous Directory</Button>
+            <Button className = "custom-button" onClick={goToEnclosingFolder} 
+            variant="contained">Previous Directory</Button>
             }
             <h3 className="editable-name-container" onDoubleClick={handleDoubleClick}>
                 {itemIcon(item)} 
                 {isEditing ? (
-                    <input 
-                        type="text" 
-                        className="editable-input"
-                        value={editableName} 
-                        onChange={handleNameChange} 
-                        onBlur={handleBlur} 
-                        onKeyDown={handleKeyPress} 
-                        autoFocus
-                    />
-                ) : (
-                    <span className="name-container">{item.name}</span>
+                    <input type="text" className="editable-input" value={editableName} onChange={handleNameChange} 
+                    onBlur={handleBlur} onKeyDown={handleKeyPress} autoFocus/>
+                    ) : (
+                        <span className="name-container">{item.name}</span>
                 )}
             </h3>
             <div className="item">    
@@ -97,7 +103,6 @@ function ItemView(item: Item) {
         </div>
     );
 }
-
 
 interface WorkspaceContextProps {
     currentItem: Item | null;
@@ -161,8 +166,8 @@ export function Workspace() {
             }
             return updatedStack;
         });
-        if (invalidName){
-            alert("No note created. Duplicate name in Directory");
+        if (invalidName) {
+            alert("Duplicate name in directory. No note created.");
         }
     }, []);
     
@@ -192,27 +197,25 @@ export function Workspace() {
             return updatedStack;
             
         });
-        if (invalidName)
-        {
-            alert("No directory created. Duplicate name in directory");
+        if (invalidName) {
+            alert("Duplicate name in directory. No directory created.");
         }
     }, []);
 
     const deletion = useCallback((selectedItems: Item[]) => {
         if (selectedItems.length === 0)
             {
-                alert("No deletion. No selected items")
+                alert("No selected items to delete")
                 return; 
             }
 
         setItemStack(prevStack => {
-            // Deep clone the itemStack
             const updatedStack = _.cloneDeep(prevStack);
             const currentDir = updatedStack[updatedStack.length - 1];
 
             if (currentDir.items === undefined || currentDir.items.length === 0)
             {
-                alert("No deletion. Current directory has no items")
+                alert("Current directory has no items to delete.")
                 return updatedStack; 
             } 
 
@@ -224,9 +227,9 @@ export function Workspace() {
         
     }, []);
 
-    const updateName = (newName: string) => {
+    const updateName = useCallback((newName: string) => {
         if (newName === "") {
-            alert("No changes. Name cannot be an empty string");
+            alert("Name cannot be an empty string");
             return;
         }
         let invalidName = false;
@@ -242,12 +245,10 @@ export function Workspace() {
             return updatedStack;
         });
         // moved outside to avoid double setItemStack call
-        if (invalidName)
-        {
-            alert("No Change Ocurred. Duplicate name in Directory");
+        if (invalidName) {
+            alert("Duplicate name in directory. No item created.");
         }
-
-    };
+    }, []);
 
     const duplicateName = (dirToCheckForDuplicate:Item | undefined, newName:string):boolean => {
         let invalidName = false;
@@ -271,17 +272,15 @@ export function Workspace() {
 
     const currentItem = itemStack[itemStack.length - 1];
 
+    // Sort by [directory, notes] then alphabetical
     const sortItems = (items: Item[]): Item[] => {
         return items.sort((a, b) => {
-            // Ensure directories are on top
             if (a.type === 'directory' && b.type !== 'directory') {
                 return -1;
             }
             if (a.type !== 'directory' && b.type === 'directory') {
                 return 1;
             }
-    
-            // Same type, sort them alphabetically by name
             return a.name.localeCompare(b.name);
         });
     };

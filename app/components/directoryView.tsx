@@ -16,7 +16,6 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
     const [selectedItems, setSelectedItems] = useState<Item[]>([]);
     const [lastClickedItem, setLastClickedItem] = useState<number | null>(null);
 
-
     const handleAddNote = () => {
         const fileName = window.prompt("Enter the name of the new note:");
         if (fileName === null) return;
@@ -30,8 +29,17 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
     };
 
     const handleDelete = () => {
-        window.confirm("Please confirm you would like to delete the selected files")
-        deletion(selectedItems);
+        if(selectedItems.length == 0){
+            alert("No items selected");
+            return
+        }
+        const fileNames = selectedItems.map(item => item.name);
+        const fileList = fileNames.join('\n');
+        const confirmationMessage = `Please confirm you would like to delete the following files:\n\n${fileList}`;
+
+        if (window.confirm(confirmationMessage)) {
+            deletion(selectedItems);
+        }
     }
 
     const handleItemClick = (item: Item) => {
@@ -55,7 +63,6 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
                 setSelectedItems([childItem]);
             }
         }
-    
         setLastClickedItem(index);
     };
     
@@ -63,29 +70,12 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
     return (
         <div>
             <div className='push-button'>
-                <Button className='push-button' onClick={handleAddNote} variant="contained"
-                sx={{
-                    marginRight: 2,
-                    backgroundColor: '#6a3481',
-                    '&:hover': {
-                        backgroundColor: '#8c4ba2'
-                    }
-                  }}>+ Note</Button>
-                <Button className='push-button' onClick={handleAddDirectory} variant="contained"
-                sx={{
-                    marginRight: 2,
-                    backgroundColor: '#6a3481',
-                    '&:hover': {
-                        backgroundColor: '#8c4ba2'
-                    }
-                  }}>+ Directory</Button>
-                <Button className='push-button' onClick={handleDelete} variant="contained"
-                sx={{
-                    backgroundColor: '#6a3481',
-                    '&:hover': {
-                        backgroundColor: '#8c4ba2'
-                    }
-                  }}>- Delete</Button>
+                <Button className = "custom-button" onClick={handleAddNote} 
+                variant="contained">+ Note</Button>
+                <Button className = "custom-button" onClick={handleAddDirectory} 
+                variant="contained">+ Directory</Button>
+                <Button className = "custom-button" onClick={handleDelete} 
+                variant="contained">- Delete</Button>
             </div>
             
             <table className="dirSection">
@@ -94,7 +84,7 @@ const DirectoryView: React.FC<DirectoryViewProps> = ({ directory}) => {
                         <td>Name</td>
                     </th>
                     {directory.items?.map((childItem, index) => (
-                        <tr className={`dirItem ${selectedItems.includes(childItem) ? "selected" : ""}`}
+                        <tr className={`dirItem no-select ${selectedItems.includes(childItem) ? "selected" : ""}`}
                         key={index} 
                         onDoubleClick={() => handleItemClick(childItem)} 
                         onClick={(event) => handleSelectionClick(event, childItem, index)}>
